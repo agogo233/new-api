@@ -1,8 +1,7 @@
-FROM oven/bun:1@sha256:0733e50325078969732ebe3b15ce4c4be5082f18c4ac1a0f0ca4839c2e4e42a7 AS builder
+FROM oven/bun:latest AS builder
 
 WORKDIR /build
-COPY web/package.json .
-COPY web/bun.lock .
+COPY web/package.json web/bun.lock ./
 RUN bun install
 COPY ./web .
 COPY ./VERSION .
@@ -18,21 +17,35 @@ ENV GOEXPERIMENT=greenteagc
 
 WORKDIR /build
 
-ADD go.mod go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . .
+COPY main.go ./
+COPY common/ ./common/
+COPY constant/ ./constant/
+COPY controller/ ./controller/
+COPY dto/ ./dto/
+COPY i18n/ ./i18n/
+COPY logger/ ./logger/
+COPY middleware/ ./middleware/
+COPY model/ ./model/
+COPY oauth/ ./oauth/
+COPY pkg/ ./pkg/
+COPY relay/ ./relay/
+COPY router/ ./router/
+COPY service/ ./service/
+COPY setting/ ./setting/
+COPY types/ ./types/
 COPY --from=builder /build/dist ./web/dist
 RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(cat VERSION)'" -o new-api
 
-FROM debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
+FROM alpine:3.21
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates tzdata libasan8 wget \
-    && rm -rf /var/lib/apt/lists/* \
-    && update-ca-certificates
+RUN apk add --no-cache ca-certificates tzdata wget \
+    && adduser -D -u 1000 appuser
 
 COPY --from=builder2 /build/new-api /
 EXPOSE 3000
 WORKDIR /data
+USER appuser
 ENTRYPOINT ["/new-api"]
