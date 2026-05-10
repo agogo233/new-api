@@ -42,6 +42,7 @@ RUN apk add --no-cache ca-certificates tzdata wget \
     && adduser -D -u 1000 appuser
 
 COPY --from=builder2 /build/new-api /
+COPY LICENSE NOTICE THIRD-PARTY-LICENSES.md /licenses/
 EXPOSE 3000
 WORKDIR /data
 USER appuser
