@@ -9,3 +9,4 @@ docs
 .eslintcache
 .gocache
 /web/node_modules
+!THIRD-PARTY-LICENSES.md
