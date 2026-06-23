@@ -93,5 +93,8 @@
     "singleQuote": true,
     "jsxSingleQuote": true
   },
+  "overrides": {
+    "date-fns": "2.30.0"
+  },
   "proxy": "http://localhost:3000"
 }
