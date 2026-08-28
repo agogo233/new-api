@@ -55,6 +55,12 @@ export const CONSUMPTION_DISTRIBUTION_CHART_OPTIONS = [
   { value: 'area', labelKey: 'Area Chart' },
 ] as const
 
+export const CONSUMPTION_METRIC_OPTIONS = [
+  { value: 'quota', labelKey: 'Quota' },
+  { value: 'count', labelKey: 'Calls' },
+  { value: 'tokens', labelKey: 'Tokens' },
+] as const
+
 export const MODEL_ANALYTICS_CHART_OPTIONS = [
   { value: 'trend', labelKey: 'Call Trend' },
   { value: 'proportion', labelKey: 'Call Count Distribution' },
