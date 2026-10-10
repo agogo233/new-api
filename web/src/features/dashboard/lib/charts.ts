@@ -378,7 +378,7 @@ export function processChartData(
 
   // Area chart: top models by metric + "Other" bucket (too many series = unreadable)
   const MAX_AREA_MODELS = 15
-  const rankedAreaModels = Array.from(modelTotalsMap.entries())
+  const rankedAreaModels = [...modelTotalsMap.entries()]
     .map(([model, stats]) => ({
       Model: model,
       Raw: metricRaw(stats),
