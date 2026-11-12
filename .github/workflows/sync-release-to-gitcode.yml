@@ -1,7 +1,7 @@
 name: Sync Release to GitCode
 
 permissions:
-  actions: read
+  actions: write
   contents: read
 
 on:
@@ -34,6 +34,13 @@ jobs:
       release_asset_matrix: ${{ steps.assets.outputs.matrix }}
       has_release_assets: ${{ steps.assets.outputs.has_assets }}
     steps:
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 7
+          keep_minimum_runs: 3
       - name: Create or update GitCode release
         id: release
         env:
@@ -226,7 +233,7 @@ jobs:
           name: gitcode-release-assets
           path: release-assets/*
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 7
 
   gitcode-release-assets:
     name: Publish GitCode asset (${{ matrix.file_name }})
